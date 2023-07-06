@@ -2,33 +2,49 @@
 
 function launcher_load_assets(){
 
-    wp_enqueue_style( 'launcher-style', get_stylesheet_uri() );
 
-    wp_enqueue_style( 'google-font', '//fonts.googleapis.com/css?family=Open+Sans:400,700,800');
-    wp_enqueue_style( 'animate-css', get_template_directory_uri() . '/css/animate.css', '1.0', 'all');
-    wp_enqueue_style( 'icomoon-css', get_template_directory_uri() . '/css/icomoon.css', '1.0', 'all');
-    wp_enqueue_style( 'bootstrap-css', get_template_directory_uri() . '/css/bootstrap.css', '1.0', 'all');
-    wp_enqueue_style( 'style-css', get_template_directory_uri() . '/css/style.css', '1.0', 'all');
+    if (is_page()){
 
-    wp_enqueue_script( 'bootstrap-min', get_template_directory_uri() . '/js/bootstrap.min.js', array('jquery'), 1.0, true);
-    wp_enqueue_script( 'jquery-easing', get_template_directory_uri() . '/js/jquery.easing.1.3.js', array('jquery'), 1.0, true);
-    wp_enqueue_script( 'jquery-waypoint', get_template_directory_uri() . '/js/jquery.waypoints.min.js', array('jquery'), 1.0, true);
-    wp_enqueue_script( 'countdown-js', get_template_directory_uri() . '/js/simplyCountdown.js', array('jquery'), 1.0, true);
-    wp_enqueue_script( 'launcher-main-js', get_template_directory_uri() . '/js/main.js', array('jquery'), 1.0, true);
-    wp_enqueue_script( 'modernizer', get_template_directory_uri() . '/js/modernizr-2.6.2.min.js', array('jquery'), 1.0, true);
+        $launcher_template_name = basename(get_page_template());
+        if($launcher_template_name == "coming-soon.php"){
+            
+            wp_enqueue_style( 'launcher-style', get_stylesheet_uri() );
 
-    $date = new DateTime(get_field('coming_soon_date'));
-    $launcher_year =  $date->format('Y');
-    $launcher_month = $date->format('m');
-    $launcher_day = $date->format('d');
+            wp_enqueue_style( 'google-font', '//fonts.googleapis.com/css?family=Open+Sans:400,700,800');
+            wp_enqueue_style( 'animate-css', get_template_directory_uri() . '/css/animate.css', '1.0', 'all');
+            wp_enqueue_style( 'icomoon-css', get_template_directory_uri() . '/css/icomoon.css', '1.0', 'all');
+            wp_enqueue_style( 'bootstrap-css', get_template_directory_uri() . '/css/bootstrap.css', '1.0', 'all');
+            wp_enqueue_style( 'style-css', get_template_directory_uri() . '/css/style.css', '1.0', 'all');
+        
+            wp_enqueue_script( 'bootstrap-min', get_template_directory_uri() . '/js/bootstrap.min.js', array('jquery'), 1.0, true);
+            wp_enqueue_script( 'jquery-easing', get_template_directory_uri() . '/js/jquery.easing.1.3.js', array('jquery'), 1.0, true);
+            wp_enqueue_script( 'jquery-waypoint', get_template_directory_uri() . '/js/jquery.waypoints.min.js', array('jquery'), 1.0, true);
+            wp_enqueue_script( 'countdown-js', get_template_directory_uri() . '/js/simplyCountdown.js', array('jquery'), 1.0, true);
+            wp_enqueue_script( 'launcher-main-js', get_template_directory_uri() . '/js/main.js', array('jquery'), 1.0, true);
+            wp_enqueue_script( 'modernizer', get_template_directory_uri() . '/js/modernizr-2.6.2.min.js', array('jquery'), 1.0, true);
+        
+            $date = new DateTime(get_field('coming_soon_date'));
+            $launcher_year =  $date->format('Y');
+            $launcher_month = $date->format('m');
+            $launcher_day = $date->format('d');
+        
+            wp_localize_script('launcher-main-js','datedata', array(
+        
+                "year" => $launcher_year,
+                "month" => $launcher_month,
+                "day" => $launcher_day
+        
+            ));
+        }else{
+            wp_enqueue_style( 'launcher-style', get_stylesheet_uri() );
+            wp_enqueue_style( 'bootstrap-css', get_template_directory_uri() . '/css/bootstrap.css', '1.0', 'all');
 
-    wp_localize_script('launcher-main-js','datedata', array(
+            wp_enqueue_script( 'bootstrap-min', get_template_directory_uri() . '/js/bootstrap.min.js', array('jquery'), 1.0, true);
+            wp_enqueue_script( 'launcher-main-js', get_template_directory_uri() . '/js/main.js', array('jquery'), 1.0, true);
+        }
+    }
 
-        "year" => $launcher_year,
-        "month" => $launcher_month,
-        "day" => $launcher_day
-
-    ));
+   
 }
 
 add_action('wp_enqueue_scripts', 'launcher_load_assets');
